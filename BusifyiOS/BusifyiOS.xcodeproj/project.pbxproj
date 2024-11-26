@@ -1,0 +1,785 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		D75A3A732CBC043300919B8E /* BusifyNotificationExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = D75A3A6C2CBC043300919B8E /* BusifyNotificationExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		D75A3A7B2CBC05E600919B8E /* OneSignalExtension in Frameworks */ = {isa = PBXBuildFile; productRef = D75A3A7A2CBC05E600919B8E /* OneSignalExtension */; };
+		D75A3A7D2CBC05E600919B8E /* OneSignalFramework in Frameworks */ = {isa = PBXBuildFile; productRef = D75A3A7C2CBC05E600919B8E /* OneSignalFramework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		D75A3A712CBC043300919B8E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D788164D2CBAF8CA0089683A /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D75A3A6B2CBC043300919B8E;
+			remoteInfo = BusifyNotificationExtension;
+		};
+		D78816662CBAF8CE0089683A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D788164D2CBAF8CA0089683A /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D78816542CBAF8CA0089683A;
+			remoteInfo = BusifyiOS;
+		};
+		D78816702CBAF8CE0089683A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D788164D2CBAF8CA0089683A /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D78816542CBAF8CA0089683A;
+			remoteInfo = BusifyiOS;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		D75A3A782CBC043300919B8E /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				D75A3A732CBC043300919B8E /* BusifyNotificationExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		D75A3A6C2CBC043300919B8E /* BusifyNotificationExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = BusifyNotificationExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		D78816552CBAF8CA0089683A /* BusifyiOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BusifyiOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D78816652CBAF8CE0089683A /* BusifyiOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BusifyiOSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		D788166F2CBAF8CE0089683A /* BusifyiOSUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BusifyiOSUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		D75A3A672CBC040600919B8E /* Exceptions for "BusifyiOS" folder in "BusifyiOS" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = D78816542CBAF8CA0089683A /* BusifyiOS */;
+		};
+		D75A3A772CBC043300919B8E /* Exceptions for "BusifyNotificationExtension" folder in "BusifyNotificationExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = D75A3A6B2CBC043300919B8E /* BusifyNotificationExtension */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		D75A3A6D2CBC043300919B8E /* BusifyNotificationExtension */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				D75A3A772CBC043300919B8E /* Exceptions for "BusifyNotificationExtension" folder in "BusifyNotificationExtension" target */,
+			);
+			path = BusifyNotificationExtension;
+			sourceTree = "<group>";
+		};
+		D78816572CBAF8CA0089683A /* BusifyiOS */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				D75A3A672CBC040600919B8E /* Exceptions for "BusifyiOS" folder in "BusifyiOS" target */,
+			);
+			path = BusifyiOS;
+			sourceTree = "<group>";
+		};
+		D78816682CBAF8CE0089683A /* BusifyiOSTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = BusifyiOSTests;
+			sourceTree = "<group>";
+		};
+		D78816722CBAF8CE0089683A /* BusifyiOSUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = BusifyiOSUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		D75A3A692CBC043300919B8E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D78816522CBAF8CA0089683A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D75A3A7D2CBC05E600919B8E /* OneSignalFramework in Frameworks */,
+				D75A3A7B2CBC05E600919B8E /* OneSignalExtension in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D78816622CBAF8CE0089683A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D788166C2CBAF8CE0089683A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		D788164C2CBAF8CA0089683A = {
+			isa = PBXGroup;
+			children = (
+				D78816572CBAF8CA0089683A /* BusifyiOS */,
+				D78816682CBAF8CE0089683A /* BusifyiOSTests */,
+				D78816722CBAF8CE0089683A /* BusifyiOSUITests */,
+				D75A3A6D2CBC043300919B8E /* BusifyNotificationExtension */,
+				D78816562CBAF8CA0089683A /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		D78816562CBAF8CA0089683A /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				D78816552CBAF8CA0089683A /* BusifyiOS.app */,
+				D78816652CBAF8CE0089683A /* BusifyiOSTests.xctest */,
+				D788166F2CBAF8CE0089683A /* BusifyiOSUITests.xctest */,
+				D75A3A6C2CBC043300919B8E /* BusifyNotificationExtension.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		D75A3A6B2CBC043300919B8E /* BusifyNotificationExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D75A3A742CBC043300919B8E /* Build configuration list for PBXNativeTarget "BusifyNotificationExtension" */;
+			buildPhases = (
+				D75A3A682CBC043300919B8E /* Sources */,
+				D75A3A692CBC043300919B8E /* Frameworks */,
+				D75A3A6A2CBC043300919B8E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				D75A3A6D2CBC043300919B8E /* BusifyNotificationExtension */,
+			);
+			name = BusifyNotificationExtension;
+			packageProductDependencies = (
+			);
+			productName = BusifyNotificationExtension;
+			productReference = D75A3A6C2CBC043300919B8E /* BusifyNotificationExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		D78816542CBAF8CA0089683A /* BusifyiOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D78816792CBAF8CE0089683A /* Build configuration list for PBXNativeTarget "BusifyiOS" */;
+			buildPhases = (
+				D78816512CBAF8CA0089683A /* Sources */,
+				D78816522CBAF8CA0089683A /* Frameworks */,
+				D78816532CBAF8CA0089683A /* Resources */,
+				D75A3A782CBC043300919B8E /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				D75A3A722CBC043300919B8E /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				D78816572CBAF8CA0089683A /* BusifyiOS */,
+			);
+			name = BusifyiOS;
+			packageProductDependencies = (
+				D75A3A7A2CBC05E600919B8E /* OneSignalExtension */,
+				D75A3A7C2CBC05E600919B8E /* OneSignalFramework */,
+			);
+			productName = BusifyiOS;
+			productReference = D78816552CBAF8CA0089683A /* BusifyiOS.app */;
+			productType = "com.apple.product-type.application";
+		};
+		D78816642CBAF8CE0089683A /* BusifyiOSTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D788167C2CBAF8CE0089683A /* Build configuration list for PBXNativeTarget "BusifyiOSTests" */;
+			buildPhases = (
+				D78816612CBAF8CE0089683A /* Sources */,
+				D78816622CBAF8CE0089683A /* Frameworks */,
+				D78816632CBAF8CE0089683A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				D78816672CBAF8CE0089683A /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				D78816682CBAF8CE0089683A /* BusifyiOSTests */,
+			);
+			name = BusifyiOSTests;
+			packageProductDependencies = (
+			);
+			productName = BusifyiOSTests;
+			productReference = D78816652CBAF8CE0089683A /* BusifyiOSTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		D788166E2CBAF8CE0089683A /* BusifyiOSUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D788167F2CBAF8CE0089683A /* Build configuration list for PBXNativeTarget "BusifyiOSUITests" */;
+			buildPhases = (
+				D788166B2CBAF8CE0089683A /* Sources */,
+				D788166C2CBAF8CE0089683A /* Frameworks */,
+				D788166D2CBAF8CE0089683A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				D78816712CBAF8CE0089683A /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				D78816722CBAF8CE0089683A /* BusifyiOSUITests */,
+			);
+			name = BusifyiOSUITests;
+			packageProductDependencies = (
+			);
+			productName = BusifyiOSUITests;
+			productReference = D788166F2CBAF8CE0089683A /* BusifyiOSUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		D788164D2CBAF8CA0089683A /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1600;
+				LastUpgradeCheck = 1600;
+				TargetAttributes = {
+					D75A3A6B2CBC043300919B8E = {
+						CreatedOnToolsVersion = 16.0;
+					};
+					D78816542CBAF8CA0089683A = {
+						CreatedOnToolsVersion = 16.0;
+					};
+					D78816642CBAF8CE0089683A = {
+						CreatedOnToolsVersion = 16.0;
+						TestTargetID = D78816542CBAF8CA0089683A;
+					};
+					D788166E2CBAF8CE0089683A = {
+						CreatedOnToolsVersion = 16.0;
+						TestTargetID = D78816542CBAF8CA0089683A;
+					};
+				};
+			};
+			buildConfigurationList = D78816502CBAF8CA0089683A /* Build configuration list for PBXProject "BusifyiOS" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = D788164C2CBAF8CA0089683A;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				D75A3A792CBC05E600919B8E /* XCRemoteSwiftPackageReference "OneSignal-XCFramework" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = D78816562CBAF8CA0089683A /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				D78816542CBAF8CA0089683A /* BusifyiOS */,
+				D78816642CBAF8CE0089683A /* BusifyiOSTests */,
+				D788166E2CBAF8CE0089683A /* BusifyiOSUITests */,
+				D75A3A6B2CBC043300919B8E /* BusifyNotificationExtension */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		D75A3A6A2CBC043300919B8E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D78816532CBAF8CA0089683A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D78816632CBAF8CE0089683A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D788166D2CBAF8CE0089683A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		D75A3A682CBC043300919B8E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D78816512CBAF8CA0089683A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D78816612CBAF8CE0089683A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D788166B2CBAF8CE0089683A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		D75A3A722CBC043300919B8E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D75A3A6B2CBC043300919B8E /* BusifyNotificationExtension */;
+			targetProxy = D75A3A712CBC043300919B8E /* PBXContainerItemProxy */;
+		};
+		D78816672CBAF8CE0089683A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D78816542CBAF8CA0089683A /* BusifyiOS */;
+			targetProxy = D78816662CBAF8CE0089683A /* PBXContainerItemProxy */;
+		};
+		D78816712CBAF8CE0089683A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D78816542CBAF8CA0089683A /* BusifyiOS */;
+			targetProxy = D78816702CBAF8CE0089683A /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		D75A3A752CBC043300919B8E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = MTH43FS33M;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = BusifyNotificationExtension/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = BusifyNotificationExtension;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mihnea.appbusify.busifyios.BusifyNotificationExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		D75A3A762CBC043300919B8E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = MTH43FS33M;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = BusifyNotificationExtension/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = BusifyNotificationExtension;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mihnea.appbusify.busifyios.BusifyNotificationExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		D78816772CBAF8CE0089683A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		D78816782CBAF8CE0089683A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		D788167A2CBAF8CE0089683A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = BusifyiOS/BusifyiOS.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"BusifyiOS/Preview Content\"";
+				DEVELOPMENT_TEAM = MTH43FS33M;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = BusifyiOS/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Busify;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.travel";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Busify would like to use your location and display it on the map to make it more convenient for you to navigate.";
+				INFOPLIST_KEY_NSMotionUsageDescription = "Busify would like to extend the localization feature by using your phone's motion data in order to display your heading on the map.";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mihnea.appbusify.busifyios;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		D788167B2CBAF8CE0089683A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = BusifyiOS/BusifyiOS.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"BusifyiOS/Preview Content\"";
+				DEVELOPMENT_TEAM = MTH43FS33M;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = BusifyiOS/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Busify;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.travel";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Busify would like to use your location and display it on the map to make it more convenient for you to navigate.";
+				INFOPLIST_KEY_NSMotionUsageDescription = "Busify would like to extend the localization feature by using your phone's motion data in order to display your heading on the map.";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mihnea.appbusify.busifyios;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		D788167D2CBAF8CE0089683A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 55B9GSLMA2;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mihnea.BusifyiOSTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BusifyiOS.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/BusifyiOS";
+			};
+			name = Debug;
+		};
+		D788167E2CBAF8CE0089683A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 55B9GSLMA2;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mihnea.BusifyiOSTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BusifyiOS.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/BusifyiOS";
+			};
+			name = Release;
+		};
+		D78816802CBAF8CE0089683A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 55B9GSLMA2;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mihnea.BusifyiOSUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = BusifyiOS;
+			};
+			name = Debug;
+		};
+		D78816812CBAF8CE0089683A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 55B9GSLMA2;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mihnea.BusifyiOSUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = BusifyiOS;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		D75A3A742CBC043300919B8E /* Build configuration list for PBXNativeTarget "BusifyNotificationExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D75A3A752CBC043300919B8E /* Debug */,
+				D75A3A762CBC043300919B8E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D78816502CBAF8CA0089683A /* Build configuration list for PBXProject "BusifyiOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D78816772CBAF8CE0089683A /* Debug */,
+				D78816782CBAF8CE0089683A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D78816792CBAF8CE0089683A /* Build configuration list for PBXNativeTarget "BusifyiOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D788167A2CBAF8CE0089683A /* Debug */,
+				D788167B2CBAF8CE0089683A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D788167C2CBAF8CE0089683A /* Build configuration list for PBXNativeTarget "BusifyiOSTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D788167D2CBAF8CE0089683A /* Debug */,
+				D788167E2CBAF8CE0089683A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D788167F2CBAF8CE0089683A /* Build configuration list for PBXNativeTarget "BusifyiOSUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D78816802CBAF8CE0089683A /* Debug */,
+				D78816812CBAF8CE0089683A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		D75A3A792CBC05E600919B8E /* XCRemoteSwiftPackageReference "OneSignal-XCFramework" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/OneSignal/OneSignal-XCFramework";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.2.5;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		D75A3A7A2CBC05E600919B8E /* OneSignalExtension */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D75A3A792CBC05E600919B8E /* XCRemoteSwiftPackageReference "OneSignal-XCFramework" */;
+			productName = OneSignalExtension;
+		};
+		D75A3A7C2CBC05E600919B8E /* OneSignalFramework */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D75A3A792CBC05E600919B8E /* XCRemoteSwiftPackageReference "OneSignal-XCFramework" */;
+			productName = OneSignalFramework;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = D788164D2CBAF8CA0089683A /* Project object */;
+}
