@@ -196,6 +196,7 @@ struct WebView: UIViewRepresentable {
         var parent: WebView
         var lastLoadedURL: String?
         var webView: WKWebView?
+        var watchCallbacks: [String] = [] // Track active watch callbacks
 
         init(_ parent: WebView) {
             self.parent = parent
@@ -222,9 +223,9 @@ struct WebView: UIViewRepresentable {
         func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
             self.webView = webView
             print("🌐 Page finished loading")
-
-            // Inject latest location to override geolocation API
-            injectLocation()
+            
+            // Setup the location override system
+            setupLocationOverride()
         }
 
         func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
@@ -233,57 +234,122 @@ struct WebView: UIViewRepresentable {
             }
         }
 
-        private func injectLocation() {
+        private func setupLocationOverride() {
             guard let webView = webView else { return }
-            guard let location = parent.locationManager.lastKnownLocation else {
+            
+            let setupJS = """
+            // Clear any existing overrides
+            delete navigator.geolocation._overridden;
+            
+            // Store original methods if not already stored
+            if (!navigator.geolocation._original) {
+                navigator.geolocation._original = {
+                    getCurrentPosition: navigator.geolocation.getCurrentPosition.bind(navigator.geolocation),
+                    watchPosition: navigator.geolocation.watchPosition.bind(navigator.geolocation),
+                    clearWatch: navigator.geolocation.clearWatch.bind(navigator.geolocation)
+                };
+            }
+            
+            // Global storage for watch callbacks and current location
+            window._watchCallbacks = window._watchCallbacks || {};
+            window._watchIdCounter = window._watchIdCounter || 1;
+            window._currentLocation = window._currentLocation || null;
+            
+            // Override getCurrentPosition
+            navigator.geolocation.getCurrentPosition = function(success, error, options) {
+                console.log('📍 getCurrentPosition called');
+                if (window._currentLocation) {
+                    success({
+                        coords: window._currentLocation,
+                        timestamp: Date.now()
+                    });
+                } else {
+                    // Fallback to original if no injected location
+                    navigator.geolocation._original.getCurrentPosition(success, error, options);
+                }
+            };
+            
+            // Override watchPosition
+            navigator.geolocation.watchPosition = function(success, error, options) {
+                console.log('📍 watchPosition called');
+                var watchId = window._watchIdCounter++;
+                window._watchCallbacks[watchId] = success;
+                
+                // Immediately call with current location if available
+                if (window._currentLocation) {
+                    success({
+                        coords: window._currentLocation,
+                        timestamp: Date.now()
+                    });
+                }
+                
+                return watchId;
+            };
+            
+            // Override clearWatch
+            navigator.geolocation.clearWatch = function(watchId) {
+                console.log('📍 clearWatch called for ID:', watchId);
+                delete window._watchCallbacks[watchId];
+            };
+            
+            // Function to update location and notify all watchers
+            window.updateLocation = function(location) {
+                window._currentLocation = location;
+                console.log('📍 Location updated:', location);
+                
+                // Notify all active watch callbacks
+                Object.values(window._watchCallbacks).forEach(callback => {
+                    if (typeof callback === 'function') {
+                        callback({
+                            coords: location,
+                            timestamp: Date.now()
+                        });
+                    }
+                });
+            };
+            
+            navigator.geolocation._overridden = true;
+            console.log('✅ Geolocation API successfully overridden');
+            """
+            
+            webView.evaluateJavaScript(setupJS) { result, error in
+                if let error = error {
+                    print("❌ Setup JS error: \(error)")
+                } else {
+                    print("✅ Geolocation override setup complete")
+                    // Inject current location if available
+                    self.injectCurrentLocation()
+                }
+            }
+        }
+
+        func injectCurrentLocation() {
+            guard let webView = webView,
+                  let location = parent.locationManager.lastKnownLocation else {
                 print("⚠️ No location available to inject")
                 return
             }
 
             let latitude = location.coordinate.latitude
             let longitude = location.coordinate.longitude
+            
             let locationJS = """
-            console.log('🔧 Overriding geolocation API');
-            navigator.geolocation.getCurrentPosition = function(success, error) {
-                console.log('📍 getCurrentPosition called');
-                success({
-                    coords: {
-                        latitude: \(latitude),
-                        longitude: \(longitude),
-                        accuracy: 10,
-                        altitude: null,
-                        altitudeAccuracy: null,
-                        heading: null,
-                        speed: null
-                    },
-                    timestamp: Date.now()
-                });
-            };
-            navigator.geolocation.watchPosition = function(success, error) {
-                console.log('📍 watchPosition called');
-                var id = Math.floor(Math.random() * 10000);
-                setInterval(function() {
-                    success({
-                        coords: {
-                            latitude: \(latitude),
-                            longitude: \(longitude),
-                            accuracy: 10,
-                            altitude: null,
-                            altitudeAccuracy: null,
-                            heading: null,
-                            speed: null
-                        },
-                        timestamp: Date.now()
-                    });
-                }, 1000);
-                return id;
-            };
+            window.updateLocation({
+                latitude: \(latitude),
+                longitude: \(longitude),
+                accuracy: 10,
+                altitude: null,
+                altitudeAccuracy: null,
+                heading: null,
+                speed: null
+            });
             """
+            
             webView.evaluateJavaScript(locationJS) { result, error in
                 if let error = error {
-                    print("❌ Location JS injection error: \(error)")
+                    print("❌ Location injection error: \(error)")
                 } else {
-                    print("✅ Location API overridden in WebView")
+                    print("✅ Location injected: \(latitude), \(longitude)")
                 }
             }
         }
@@ -300,39 +366,6 @@ struct WebView: UIViewRepresentable {
         // Debug message handler
         userContentController.add(context.coordinator, name: "debugLog")
 
-        // Inject console.log override to forward logs to native side
-        let setupScript = """
-        window.nativeLocationUpdate = function(location) {
-            window._latestLocation = location;
-            if (window._watchSuccess) {
-                window._watchSuccess({
-                    coords: location,
-                    timestamp: Date.now()
-                });
-            }
-        };
-
-        navigator.geolocation.getCurrentPosition = function(success, error) {
-            console.log('📍 getCurrentPosition called');
-            success({
-                coords: window._latestLocation || {
-                    latitude: 0,
-                    longitude: 0,
-                    accuracy: 100
-                },
-                timestamp: Date.now()
-            });
-        };
-
-        navigator.geolocation.watchPosition = function(success, error) {
-            console.log('📍 watchPosition called');
-            window._watchSuccess = success;
-            return 1;
-        };
-        """
-        let userScript = WKUserScript(source: setupScript, injectionTime: .atDocumentStart, forMainFrameOnly: false)
-        userContentController.addUserScript(userScript)
-
         config.userContentController = userContentController
         config.allowsInlineMediaPlayback = true
         config.mediaTypesRequiringUserActionForPlayback = []
@@ -342,36 +375,30 @@ struct WebView: UIViewRepresentable {
 
         loadURL(webView: webView, context: context)
         
-        self.locationManager.onLocationUpdate = { [weak webView] location in
-            let latitude = location.coordinate.latitude
-            let longitude = location.coordinate.longitude
-            let locationJS = """
-            window.nativeLocationUpdate({
-                latitude: \(latitude),
-                longitude: \(longitude),
-                accuracy: 10,
-                altitude: null,
-                altitudeAccuracy: null,
-                heading: null,
-                speed: null
-            });
-            """
-            webView?.evaluateJavaScript(locationJS, completionHandler: nil)
+        // Set up location update callback
+        self.locationManager.onLocationUpdate = { [weak context] location in
+            DispatchQueue.main.async {
+                context?.coordinator.injectCurrentLocation()
+            }
         }
 
         return webView
     }
 
     func updateUIView(_ webView: WKWebView, context: Context) {
-        loadURL(webView: webView, context: context)
+        // Check if URL changed
+        if let newURL = URL(string: url),
+           newURL.absoluteString != context.coordinator.lastLoadedURL {
+            loadURL(webView: webView, context: context)
+        }
 
         if refreshTrigger {
             webView.reload()
         }
         
-        updateLocationInWebView(webView)
+        // Inject location when locationUpdateTrigger changes
+        context.coordinator.injectCurrentLocation()
     }
-
 
     private func loadURL(webView: WKWebView, context: Context) {
         guard let newURL = URL(string: url) else { return }
@@ -383,58 +410,6 @@ struct WebView: UIViewRepresentable {
         print("🌐 Loading URL: \(newURL.absoluteString)")
         context.coordinator.lastLoadedURL = newURL.absoluteString
         webView.load(URLRequest(url: newURL))
-    }
-    
-    func updateLocationInWebView(_ webView: WKWebView) {
-        guard let location = locationManager.lastKnownLocation else { return }
-        let latitude = location.coordinate.latitude
-        let longitude = location.coordinate.longitude
-
-        let locationJS = """
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition = function(success, error) {
-                success({
-                    coords: {
-                        latitude: \(latitude),
-                        longitude: \(longitude),
-                        accuracy: 10,
-                        altitude: null,
-                        altitudeAccuracy: null,
-                        heading: null,
-                        speed: null
-                    },
-                    timestamp: Date.now()
-                });
-            };
-            // For watchPosition, simulate calls every second
-            navigator.geolocation.watchPosition = function(success, error) {
-                var id = Math.floor(Math.random() * 10000);
-                setInterval(function() {
-                    success({
-                        coords: {
-                            latitude: \(latitude),
-                            longitude: \(longitude),
-                            accuracy: 10,
-                            altitude: null,
-                            altitudeAccuracy: null,
-                            heading: null,
-                            speed: null
-                        },
-                        timestamp: Date.now()
-                    });
-                }, 1000);
-                return id;
-            };
-        }
-        """
-
-        webView.evaluateJavaScript(locationJS) { result, error in
-            if let error = error {
-                print("❌ Location update JS error: \(error)")
-            } else {
-                print("✅ Location updated in WebView")
-            }
-        }
     }
 
 }
