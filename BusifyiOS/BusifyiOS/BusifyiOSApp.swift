@@ -23,7 +23,11 @@ class AppDelegate: NSObject, UIApplicationDelegate {
        // requestPermission will show the native iOS notification permission prompt.
        // We recommend removing the following code and instead using an In-App Message to prompt for notification permission
        OneSignal.Notifications.requestPermission({ accepted in
-         print("User accepted notifications: \(accepted)")
+           print("User accepted notifications: \(accepted)")
+           if UserDefaults.standard.object(forKey: "busifycluj.notificationid") == nil {
+               let externalId = UUID().uuidString
+               UserDefaults.standard.set(externalId, forKey: "busifycluj.notificationid")
+           }
        }, fallbackToSettings: true)
 
        // Login your customer with externalId
