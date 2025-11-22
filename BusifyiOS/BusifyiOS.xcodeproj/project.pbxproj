@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		D75A3A732CBC043300919B8E /* BusifyNotificationExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = D75A3A6C2CBC043300919B8E /* BusifyNotificationExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		D768ECDC2ED0D15A00C1111F /* RevenueCat in Frameworks */ = {isa = PBXBuildFile; productRef = D768ECDB2ED0D15A00C1111F /* RevenueCat */; };
 		D7EEAEAD2D025C4C006E1BC4 /* OneSignalExtension in Frameworks */ = {isa = PBXBuildFile; productRef = D7EEAEAC2D025C4C006E1BC4 /* OneSignalExtension */; };
 		D7EEAEAF2D025C4C006E1BC4 /* OneSignalFramework in Frameworks */ = {isa = PBXBuildFile; productRef = D7EEAEAE2D025C4C006E1BC4 /* OneSignalFramework */; };
 /* End PBXBuildFile section */
@@ -115,6 +116,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D768ECDC2ED0D15A00C1111F /* RevenueCat in Frameworks */,
 				D7EEAEAF2D025C4C006E1BC4 /* OneSignalFramework in Frameworks */,
 				D7EEAEAD2D025C4C006E1BC4 /* OneSignalExtension in Frameworks */,
 			);
@@ -205,6 +207,7 @@
 			packageProductDependencies = (
 				D7EEAEAC2D025C4C006E1BC4 /* OneSignalExtension */,
 				D7EEAEAE2D025C4C006E1BC4 /* OneSignalFramework */,
+				D768ECDB2ED0D15A00C1111F /* RevenueCat */,
 			);
 			productName = BusifyiOS;
 			productReference = D78816552CBAF8CA0089683A /* BusifyiOS.app */;
@@ -293,6 +296,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				D7EEAEAB2D025C4C006E1BC4 /* XCRemoteSwiftPackageReference "OneSignal-XCFramework" */,
+				D768ECD82ED0D15A00C1111F /* XCRemoteSwiftPackageReference "purchases-ios" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = D78816562CBAF8CA0089683A /* Products */;
@@ -583,7 +587,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.2;
+				MARKETING_VERSION = 2.5;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mihnea.appbusify.busifyios;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -621,7 +625,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.2;
+				MARKETING_VERSION = 2.5;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mihnea.appbusify.busifyios;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -758,6 +762,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		D768ECD82ED0D15A00C1111F /* XCRemoteSwiftPackageReference "purchases-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/RevenueCat/purchases-ios";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.48.0;
+			};
+		};
 		D7EEAEAB2D025C4C006E1BC4 /* XCRemoteSwiftPackageReference "OneSignal-XCFramework" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/OneSignal/OneSignal-XCFramework";
@@ -769,6 +781,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		D768ECDB2ED0D15A00C1111F /* RevenueCat */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D768ECD82ED0D15A00C1111F /* XCRemoteSwiftPackageReference "purchases-ios" */;
+			productName = RevenueCat;
+		};
 		D7EEAEAC2D025C4C006E1BC4 /* OneSignalExtension */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = D7EEAEAB2D025C4C006E1BC4 /* XCRemoteSwiftPackageReference "OneSignal-XCFramework" */;

@@ -9,5 +9,7 @@
 		<string>applinks:app.busify.ro</string>
 		<string>applinks:www.app.busify.ro</string>
 	</array>
+	<key>com.apple.developer.siri</key>
+	<true/>
 </dict>
 </plist>

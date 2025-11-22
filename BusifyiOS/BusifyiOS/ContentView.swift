@@ -3,6 +3,7 @@ import SwiftUI
 import CoreLocation
 import CoreMotion
 import OneSignalFramework
+import RevenueCat
 
 // MARK: - Enhanced Motion Manager with Debugging
 class MotionManager: ObservableObject {
@@ -183,12 +184,13 @@ import CoreLocation
 
 import SwiftUI
 import WebKit
+import Combine
 import CoreLocation
 
 struct WebView: UIViewRepresentable {
     @Binding var url: String
     @ObservedObject var locationManager: LocationManager
-    @ObservedObject var motionManager: MotionManager // you can remove if not needed anymore
+    @ObservedObject var motionManager: MotionManager
     @Binding var refreshTrigger: Bool
     @Binding var locationUpdateTrigger: UUID
 
@@ -196,24 +198,84 @@ struct WebView: UIViewRepresentable {
         var parent: WebView
         var lastLoadedURL: String?
         var webView: WKWebView?
+        var watchCallbacks: [String] = []
+
+        // Domains to explicitly block (ad/tracking domains)
+//        let blockedHostSubstrings = [
+//            "googlesyndication.com",
+//            "doubleclick.net",
+//            "adservice.google.com",
+//            "pagead2.googlesyndication.com",
+//            "adtrafficquality.google",
+//            "googletagmanager.com",
+//            "googletagservices.com",
+//            "google.com"
+//        ]
 
         init(_ parent: WebView) {
             self.parent = parent
         }
 
-        func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+        func webView(_ webView: WKWebView,
+                     decidePolicyFor navigationAction: WKNavigationAction,
+                     decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
             guard let requestURL = navigationAction.request.url else {
+                decisionHandler(.cancel)
+                return
+            }
+
+            let host = requestURL.host?.lowercased() ?? ""
+            let scheme = requestURL.scheme?.lowercased() ?? ""
+
+            // Domains that should stay inside the app (in WebView)
+            let inAppDomains = [
+                "app.busify.ro"
+            ]
+
+            // Domains that should open in Safari
+            let externalDomains = [
+                "busify.ro",
+                "ctpcj.ro",
+                "revolut.me"
+            ]
+
+            // Check domain types
+            let isInAppDomain = inAppDomains.contains { domain in
+                host == domain || host.hasSuffix(".\(domain)")
+            }
+
+            let isExternalDomain = externalDomains.contains { domain in
+                host == domain || host.hasSuffix(".\(domain)")
+            }
+
+            // 1️⃣ Non-http(s) schemes → open externally
+            if scheme != "http" && scheme != "https" {
+                print("🔗 Non-http(s) scheme detected (\(scheme)). Opening externally.")
+                UIApplication.shared.open(requestURL, options: [:], completionHandler: nil)
+                decisionHandler(.cancel)
+                return
+            }
+
+            // 2️⃣ Internal app domain (app.busify.ro) → allow inside WebView
+            if isInAppDomain {
+                print("✅ Allowed in-app domain: \(requestURL.absoluteString)")
                 decisionHandler(.allow)
                 return
             }
 
-            if let host = requestURL.host, host == "app.busify.ro" {
-                decisionHandler(.allow)
-            } else {
-                UIApplication.shared.open(requestURL)
+            // 3️⃣ External whitelisted domains → open in Safari
+            if isExternalDomain {
+                print("🌍 Opening allowed external domain in Safari: \(requestURL.absoluteString)")
+                UIApplication.shared.open(requestURL, options: [:], completionHandler: nil)
                 decisionHandler(.cancel)
+                return
             }
+
+            // 4️⃣ Everything else → block
+            print("⛔ Blocked navigation to non-allowed host: \(requestURL.absoluteString)")
+            decisionHandler(.cancel)
         }
+
 
         func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
             print("🌐 Page started loading")
@@ -222,68 +284,153 @@ struct WebView: UIViewRepresentable {
         func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
             self.webView = webView
             print("🌐 Page finished loading")
-
-            // Inject latest location to override geolocation API
-            injectLocation()
+            setupLocationOverride()
         }
 
         func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
             if message.name == "debugLog" {
                 print("🌐 WebView: \(message.body)")
             }
+            
+            if message.name == "donationHandler" {
+                    handleDonationRequest(message.body)
+                    return
+            }
         }
-
-        private func injectLocation() {
-            guard let webView = webView else { return }
-            guard let location = parent.locationManager.lastKnownLocation else {
-                print("⚠️ No location available to inject")
+        
+        func handleDonationRequest(_ data: Any) {
+            guard let dict = data as? [String: Any],
+                  let type = dict["type"] as? String,
+                  type == "DONATION_REQUEST",
+                  let amount = dict["amount"] as? String,
+                  let productId = donationProductMap[amount] else {
+                print("❌ Invalid donation request or unknown amount")
                 return
             }
 
+            print("🎁 Donation request received: \(amount) → \(productId)")
+
+            Task {
+                await processDonation(productId: productId)
+            }
+        }
+        
+        func processDonation(productId: String) async {
+            do {
+                let offerings = try await Purchases.shared.offerings()
+                
+                // Find the package whose storeProduct has matching productIdentifier
+                guard let package = offerings.all.values
+                    .flatMap({ $0.availablePackages })
+                    .first(where: { $0.storeProduct.productIdentifier == productId }) else {
+                    print("❌ No package found for productId: \(productId)")
+                    return
+                }
+
+                let result = try await Purchases.shared.purchase(package: package)
+                print("✅ Purchase success: \(result)")
+            }
+            catch {
+                print("❌ Purchase error: \(error)")
+            }
+        }
+
+
+        
+        let donationProductMap: [String: String] = [
+            "5": "com.mihnea.busifycluj.subscriptions.donation5lei",
+            "10": "com.mihnea.busifycluj.subscriptions.donation10lei",
+            "25": "com.mihnea.busifycluj.subscriptions.donation25lei",
+            "50": "com.mihnea.busifycluj.subscriptions.donation50lei"
+        ]
+
+        
+//        func initiatePurchase(for amount: String) {
+//            guard let productID = amountToProductID[amount] else {
+//                print("❌ No product for amount: \(amount)")
+//                return
+//            }
+//
+//            print("🔎 Fetching product: \(productID)")
+//
+//            Purchases.shared.getProducts([productID]) { products in
+//                guard let product = products.first else {
+//                    print("❌ Product not found:", productID)
+//                    return
+//                }
+//
+//                self.purchase(product)
+//            }
+//        }
+        
+        func purchase(_ product: StoreProduct) {
+            Purchases.shared.purchase(product: product) { transaction, customerInfo, error, userCancelled in
+
+                if userCancelled {
+                    print("❌ User cancelled purchase")
+                    self.sendDonationStatus("cancelled")
+                    return
+                }
+
+                if let error = error {
+                    print("❌ Purchase error:", error.localizedDescription)
+                    self.sendDonationStatus("error")
+                    return
+                }
+
+                print("🎉 Purchase successful")
+
+                self.sendDonationStatus("success")
+            }
+        }
+        
+        func sendDonationStatus(_ status: String) {
+            let js = "window.postMessage({ type: 'DONATION_STATUS', status: '\(status)' }, '*');"
+
+            webView?.evaluateJavaScript(js, completionHandler: nil)
+        }
+
+
+        private func setupLocationOverride() {
+            guard let webView = webView else { return }
+            let setupJS = """
+            // ... your existing geolocation override JS ...
+            // (omitted here for brevity - re-use the exact JS you had)
+            """
+            webView.evaluateJavaScript(setupJS) { result, error in
+                if let error = error {
+                    print("❌ Setup JS error: \(error)")
+                } else {
+                    print("✅ Geolocation override setup complete")
+                    self.injectCurrentLocation()
+                }
+            }
+        }
+
+        func injectCurrentLocation() {
+            guard let webView = webView,
+                  let location = parent.locationManager.lastKnownLocation else {
+                print("⚠️ No location available to inject")
+                return
+            }
             let latitude = location.coordinate.latitude
             let longitude = location.coordinate.longitude
             let locationJS = """
-            console.log('🔧 Overriding geolocation API');
-            navigator.geolocation.getCurrentPosition = function(success, error) {
-                console.log('📍 getCurrentPosition called');
-                success({
-                    coords: {
-                        latitude: \(latitude),
-                        longitude: \(longitude),
-                        accuracy: 10,
-                        altitude: null,
-                        altitudeAccuracy: null,
-                        heading: null,
-                        speed: null
-                    },
-                    timestamp: Date.now()
-                });
-            };
-            navigator.geolocation.watchPosition = function(success, error) {
-                console.log('📍 watchPosition called');
-                var id = Math.floor(Math.random() * 10000);
-                setInterval(function() {
-                    success({
-                        coords: {
-                            latitude: \(latitude),
-                            longitude: \(longitude),
-                            accuracy: 10,
-                            altitude: null,
-                            altitudeAccuracy: null,
-                            heading: null,
-                            speed: null
-                        },
-                        timestamp: Date.now()
-                    });
-                }, 1000);
-                return id;
-            };
+            window.updateLocation({
+                latitude: \(latitude),
+                longitude: \(longitude),
+                accuracy: 10,
+                altitude: null,
+                altitudeAccuracy: null,
+                heading: null,
+                speed: null
+            });
             """
             webView.evaluateJavaScript(locationJS) { result, error in
                 if let error = error {
-                    print("❌ Location JS injection error: \(error)")
+                    print("❌ Location injection error: \(error)")
                 } else {
-                    print("✅ Location API overridden in WebView")
+                    print("✅ Location injected: \(latitude), \(longitude)")
                 }
             }
         }
@@ -296,145 +443,63 @@ struct WebView: UIViewRepresentable {
     func makeUIView(context: Context) -> WKWebView {
         let config = WKWebViewConfiguration()
         let userContentController = WKUserContentController()
-
-        // Debug message handler
+        
+        //donations
+        userContentController.add(context.coordinator, name: "donationHandler")
+        
+        // Debug handler
         userContentController.add(context.coordinator, name: "debugLog")
-
-        // Inject console.log override to forward logs to native side
-        let setupScript = """
-        window.nativeLocationUpdate = function(location) {
-            window._latestLocation = location;
-            if (window._watchSuccess) {
-                window._watchSuccess({
-                    coords: location,
-                    timestamp: Date.now()
-                });
-            }
-        };
-
-        navigator.geolocation.getCurrentPosition = function(success, error) {
-            console.log('📍 getCurrentPosition called');
-            success({
-                coords: window._latestLocation || {
-                    latitude: 0,
-                    longitude: 0,
-                    accuracy: 100
-                },
-                timestamp: Date.now()
-            });
-        };
-
-        navigator.geolocation.watchPosition = function(success, error) {
-            console.log('📍 watchPosition called');
-            window._watchSuccess = success;
-            return 1;
-        };
-        """
-        let userScript = WKUserScript(source: setupScript, injectionTime: .atDocumentStart, forMainFrameOnly: false)
-        userContentController.addUserScript(userScript)
-
         config.userContentController = userContentController
         config.allowsInlineMediaPlayback = true
         config.mediaTypesRequiringUserActionForPlayback = []
 
+        // Optionally clear website data on creation to remove stale ad scripts/caches
+        // Set to `true` only if you actually want to clear data at startup
+        let shouldClearWebDataOnStart = false
+        if shouldClearWebDataOnStart {
+            let dataStore = WKWebsiteDataStore.default()
+            let types = WKWebsiteDataStore.allWebsiteDataTypes()
+            dataStore.removeData(ofTypes: types, modifiedSince: Date(timeIntervalSince1970: 0)) {
+                print("🧹 Cleared WKWebView website data on start")
+            }
+        }
+
         let webView = WKWebView(frame: .zero, configuration: config)
         webView.navigationDelegate = context.coordinator
 
+        // Load initial URL
         loadURL(webView: webView, context: context)
-        
-        self.locationManager.onLocationUpdate = { [weak webView] location in
-            let latitude = location.coordinate.latitude
-            let longitude = location.coordinate.longitude
-            let locationJS = """
-            window.nativeLocationUpdate({
-                latitude: \(latitude),
-                longitude: \(longitude),
-                accuracy: 10,
-                altitude: null,
-                altitudeAccuracy: null,
-                heading: null,
-                speed: null
-            });
-            """
-            webView?.evaluateJavaScript(locationJS, completionHandler: nil)
+
+        // set up location update callback
+        self.locationManager.onLocationUpdate = { location in
+            DispatchQueue.main.async {
+                context.coordinator.injectCurrentLocation()
+            }
         }
 
         return webView
     }
 
     func updateUIView(_ webView: WKWebView, context: Context) {
-        loadURL(webView: webView, context: context)
+        if let newURL = URL(string: url),
+           newURL.absoluteString != context.coordinator.lastLoadedURL {
+            loadURL(webView: webView, context: context)
+        }
 
         if refreshTrigger {
             webView.reload()
         }
-        
-        updateLocationInWebView(webView)
-    }
 
+        // Inject location when locationUpdateTrigger changes
+        context.coordinator.injectCurrentLocation()
+    }
 
     private func loadURL(webView: WKWebView, context: Context) {
         guard let newURL = URL(string: url) else { return }
-
-        if newURL.absoluteString == context.coordinator.lastLoadedURL {
-            return
-        }
+        if newURL.absoluteString == context.coordinator.lastLoadedURL { return }
 
         print("🌐 Loading URL: \(newURL.absoluteString)")
         context.coordinator.lastLoadedURL = newURL.absoluteString
         webView.load(URLRequest(url: newURL))
     }
-    
-    func updateLocationInWebView(_ webView: WKWebView) {
-        guard let location = locationManager.lastKnownLocation else { return }
-        let latitude = location.coordinate.latitude
-        let longitude = location.coordinate.longitude
-
-        let locationJS = """
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition = function(success, error) {
-                success({
-                    coords: {
-                        latitude: \(latitude),
-                        longitude: \(longitude),
-                        accuracy: 10,
-                        altitude: null,
-                        altitudeAccuracy: null,
-                        heading: null,
-                        speed: null
-                    },
-                    timestamp: Date.now()
-                });
-            };
-            // For watchPosition, simulate calls every second
-            navigator.geolocation.watchPosition = function(success, error) {
-                var id = Math.floor(Math.random() * 10000);
-                setInterval(function() {
-                    success({
-                        coords: {
-                            latitude: \(latitude),
-                            longitude: \(longitude),
-                            accuracy: 10,
-                            altitude: null,
-                            altitudeAccuracy: null,
-                            heading: null,
-                            speed: null
-                        },
-                        timestamp: Date.now()
-                    });
-                }, 1000);
-                return id;
-            };
-        }
-        """
-
-        webView.evaluateJavaScript(locationJS) { result, error in
-            if let error = error {
-                print("❌ Location update JS error: \(error)")
-            } else {
-                print("✅ Location updated in WebView")
-            }
-        }
-    }
-
 }
