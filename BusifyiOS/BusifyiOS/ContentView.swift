@@ -128,7 +128,7 @@ struct ContentView: View {
     @StateObject private var locationManager = LocationManager()
     @StateObject private var motionManager = MotionManager()
     @State private var refreshTrigger = false
-    @State private var urlState = "https://app.busify.ro/map"
+    @State private var urlState = "https://app.busify.ro"
     let background: Color = Color(red: 248/255, green: 249/255, blue: 250/255)
 
     var body: some View {
@@ -143,7 +143,7 @@ struct ContentView: View {
             .onAppear {
                 if let externalId = UserDefaults.standard.string(forKey: "busifycluj.notificationid") {
                     OneSignal.login(externalId)
-                    urlState = "https://app.busify.ro/map?notificationUserId=\(externalId)"
+                    urlState = "https://app.busify.ro/?notificationUserId=\(externalId)"
                 }
                 locationManager.requestLocation()
             }
@@ -215,6 +215,82 @@ struct WebView: UIViewRepresentable {
         init(_ parent: WebView) {
             self.parent = parent
         }
+        
+        func handleRestorePurchases() {
+            print("🔄 Restore purchases triggered")
+            sendToWebApp(["status": "waiting"])   // show spinner in UI
+
+            Task {
+                await restorePurchasesProcess()
+            }
+        }
+
+        
+        func restorePurchasesProcess() async {
+            do {
+                let info = try await Purchases.shared.restorePurchases()
+
+                if let entitlement = info.entitlements.active.first?.value {
+                    print("✅ Restore success: active entitlement found")
+
+                    sendToWebApp([
+                        "status": "success",
+                        "productId": entitlement.productIdentifier,
+                        "isActive": entitlement.isActive,
+                        "willRenew": entitlement.willRenew,
+                        "expirationDate": entitlement.expirationDate?.timeIntervalSince1970 as Any,
+                        "purchaseDate": entitlement.originalPurchaseDate?.timeIntervalSince1970 as Any,
+                        "isSandbox": entitlement.isSandbox
+                    ])
+                } else {
+                    print("ℹ️ Restore completed but no active subscriptions")
+                    sendToWebApp([
+                        "status": "no_active_subscription"
+                    ])
+                }
+
+            } catch {
+                print("❌ Restore failed: \(error)")
+                sendToWebApp([
+                    "status": "error",
+                    "error": error.localizedDescription
+                ])
+            }
+        }
+
+        
+        func checkExistingSubscription() async {
+            do {
+                let info = try await Purchases.shared.customerInfo()
+
+                if let entitlement = info.entitlements.active.first?.value {
+                    let data: [String: Any] = [
+                        "status": "success",
+                        "productId": entitlement.productIdentifier,
+                        "isActive": entitlement.isActive,
+                        "willRenew": entitlement.willRenew,
+                        "expirationDate": entitlement.expirationDate?.timeIntervalSince1970 as Any,
+                        "purchaseDate": entitlement.originalPurchaseDate?.timeIntervalSince1970 as Any,
+                        "isSandbox": entitlement.isSandbox
+                    ]
+
+                    print("✅ Existing active subscription found, sending to WebApp...")
+                    sendToWebApp(data)
+                } else {
+                    print("ℹ️ No active subscription found")
+                    sendToWebApp([
+                        "status": "no_active_subscription"
+                    ])
+                }
+
+            } catch {
+                print("❌ Failed to fetch subscription status: \(error)")
+                sendToWebApp([
+                    "status": "error",
+                    "error": error.localizedDescription
+                ])
+            }
+        }
 
         func webView(_ webView: WKWebView,
                      decidePolicyFor navigationAction: WKNavigationAction,
@@ -285,6 +361,9 @@ struct WebView: UIViewRepresentable {
             self.webView = webView
             print("🌐 Page finished loading")
             setupLocationOverride()
+            Task {
+                await checkExistingSubscription()
+            }
         }
 
         func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
@@ -296,6 +375,11 @@ struct WebView: UIViewRepresentable {
                     handleDonationRequest(message.body)
                     return
             }
+            
+            if message.name == "restoreHandler" {
+                handleRestorePurchases()
+                return
+            }
         }
         
         func handleDonationRequest(_ data: Any) {
@@ -305,37 +389,90 @@ struct WebView: UIViewRepresentable {
                   let amount = dict["amount"] as? String,
                   let productId = donationProductMap[amount] else {
                 print("❌ Invalid donation request or unknown amount")
+                sendToWebApp(["status": "canceled"])
                 return
             }
 
             print("🎁 Donation request received: \(amount) → \(productId)")
+            sendToWebApp(["status": "waiting"])
 
             Task {
                 await processDonation(productId: productId)
             }
         }
+
+        func sendToWebApp(_ dictionary: [String: Any]) {
+            guard let data = try? JSONSerialization.data(withJSONObject: dictionary, options: []),
+                  let jsonString = String(data: data, encoding: .utf8) else {
+                print("❌ Failed to serialize message to web app")
+                return
+            }
+
+            let js = "window.receiveStatusUpdateFromiOS && window.receiveStatusUpdateFromiOS(\(jsonString))"
+
+            webView?.evaluateJavaScript(js) { result, error in
+                if let error = error {
+                    print("❌ Error sending message to web app: \(error)")
+                } else {
+                    print("✅ Message sent to web app: \(jsonString)")
+                }
+            }
+        }
+
         
         func processDonation(productId: String) async {
             do {
                 let offerings = try await Purchases.shared.offerings()
                 
-                // Find the package whose storeProduct has matching productIdentifier
                 guard let package = offerings.all.values
                     .flatMap({ $0.availablePackages })
                     .first(where: { $0.storeProduct.productIdentifier == productId }) else {
                     print("❌ No package found for productId: \(productId)")
+                    sendToWebApp(["status": "internal_error"])
                     return
                 }
 
                 let result = try await Purchases.shared.purchase(package: package)
+
+                if result.userCancelled {
+                    print("⚠️ User canceled the purchase")
+                    sendToWebApp(["status": "canceled"])
+                    return
+                }
+
                 print("✅ Purchase success: \(result)")
-            }
-            catch {
-                print("❌ Purchase error: \(error)")
+
+                let info = result.customerInfo
+
+                let activeEntitlement = info.entitlements.active.first?.value
+                let productIdResolved = activeEntitlement?.productIdentifier ?? productId
+                let expiration = activeEntitlement?.expirationDate?.timeIntervalSince1970
+                let purchaseDate = activeEntitlement?.originalPurchaseDate?.timeIntervalSince1970
+
+                sendToWebApp([
+                    "status": "success",
+                    "productId": productIdResolved,
+                    "isActive": activeEntitlement?.isActive ?? false,
+                    "willRenew": activeEntitlement?.willRenew ?? false,
+                    "expirationDate": expiration as Any,
+                    "purchaseDate": purchaseDate as Any,
+                    "isSandbox": activeEntitlement?.isSandbox ?? false
+                ])
+
+            } catch let error as NSError {
+
+                if error.code == ErrorCode.purchaseCancelledError.rawValue {
+                    print("⚠️ User canceled purchase")
+                    sendToWebApp(["status": "canceled"])
+                } else {
+                    print("❌ Purchase failed: \(error)")
+                    sendToWebApp([
+                        "status": "error",
+                        "error": error.localizedDescription
+                    ])
+                }
             }
         }
-
-
         
         let donationProductMap: [String: String] = [
             "5": "com.mihnea.busifycluj.subscriptions.donation5lei",
@@ -410,7 +547,7 @@ struct WebView: UIViewRepresentable {
         func injectCurrentLocation() {
             guard let webView = webView,
                   let location = parent.locationManager.lastKnownLocation else {
-                print("⚠️ No location available to inject")
+//                print("⚠️ No location available to inject")
                 return
             }
             let latitude = location.coordinate.latitude
@@ -428,9 +565,9 @@ struct WebView: UIViewRepresentable {
             """
             webView.evaluateJavaScript(locationJS) { result, error in
                 if let error = error {
-                    print("❌ Location injection error: \(error)")
+//                    print("❌ Location injection error: \(error)")
                 } else {
-                    print("✅ Location injected: \(latitude), \(longitude)")
+//                    print("✅ Location injected: \(latitude), \(longitude)")
                 }
             }
         }
@@ -446,6 +583,7 @@ struct WebView: UIViewRepresentable {
         
         //donations
         userContentController.add(context.coordinator, name: "donationHandler")
+        userContentController.add(context.coordinator, name: "restoreHandler")
         
         // Debug handler
         userContentController.add(context.coordinator, name: "debugLog")
