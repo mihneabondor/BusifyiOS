@@ -312,7 +312,8 @@ struct WebView: UIViewRepresentable {
             let externalDomains = [
                 "busify.ro",
                 "ctpcj.ro",
-                "revolut.me"
+                "revolut.me",
+                "instagram.com"
             ]
 
             // Check domain types
@@ -380,7 +381,70 @@ struct WebView: UIViewRepresentable {
                 handleRestorePurchases()
                 return
             }
+            
+            if message.name == "iconHandler" {
+                handleIconChange(message.body)
+                return
+            }
         }
+        
+        func handleIconChange(_ data: Any) {
+            guard
+                let dict = data as? [String: Any],
+                let type = dict["type"] as? String,
+                type == "ICON_CHANGE",
+                let iconName = dict["icon"] as? String
+            else {
+                print("❌ Invalid ICON_CHANGE message")
+                sendToWebApp([
+                    "type": "ICON_CHANGE",
+                    "status": "error",
+                    "error": "Invalid data"
+                ])
+                return
+            }
+            
+            
+            print("🎨 Request to change icon to: \(iconName)")
+            print("Supports:", UIApplication.shared.alternateIconName ?? "logo512")
+            
+            // Ensure device supports alternate icons
+            guard UIApplication.shared.supportsAlternateIcons else {
+                print("❌ Device does not support alternate icons")
+                sendToWebApp([
+                    "type": "ICON_CHANGE",
+                    "status": "error",
+                    "error": "Device does not support alternate icons"
+                ])
+                return
+            }
+
+            
+            let iconMapping: [String: String] = [
+                "retro": "RetroLogo",
+                "snow": "SnowLogo",
+                "flag": "FlagLogo",
+                "beta": "BetaLogo",
+                "turbo": "TurboLogo"
+            ]
+
+            let iconToSetName = iconMapping[iconName] ?? nil
+            let iconToSet = (iconName == "logo512") ? nil : iconToSetName
+
+            UIApplication.shared.setAlternateIconName(iconToSet) { error in
+                if let error = error {
+                    print("❌ Failed to change app icon:", error.localizedDescription)
+                    self.sendToWebApp([
+                        "type": "ICON_CHANGE",
+                        "status": "error",
+                        "error": error.localizedDescription
+                    ])
+                } else {
+                    print("✅ Icon changed successfully to \(iconName)")
+                }
+            }
+        }
+
         
         func handleDonationRequest(_ data: Any) {
             guard let dict = data as? [String: Any],
@@ -585,6 +649,9 @@ struct WebView: UIViewRepresentable {
         userContentController.add(context.coordinator, name: "donationHandler")
         userContentController.add(context.coordinator, name: "restoreHandler")
         
+        //icon change
+        userContentController.add(context.coordinator, name: "iconHandler")
+    
         // Debug handler
         userContentController.add(context.coordinator, name: "debugLog")
         config.userContentController = userContentController

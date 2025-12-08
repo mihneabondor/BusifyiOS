@@ -59,6 +59,54 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		D7050A372EE361A400E58BF8 /* Exceptions for "BusifyiOS" folder in "BusifyiOSTests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"BetaLogo/beta@2x.png",
+				"BetaLogo/beta@3x.png",
+				"FlagLogo/flag@2x.png",
+				"FlagLogo/flag@3x.png",
+				"RetroLogo/retro@2x.png",
+				"RetroLogo/retro@3x.png",
+				"SnowLogo/snow@2x.png",
+				"SnowLogo/snow@3x.png",
+				"TurboLogo/turbo@2x.png",
+				"TurboLogo/turbo@3x.png",
+			);
+			target = D78816642CBAF8CE0089683A /* BusifyiOSTests */;
+		};
+		D7050A382EE361A400E58BF8 /* Exceptions for "BusifyiOS" folder in "BusifyiOSUITests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"BetaLogo/beta@2x.png",
+				"BetaLogo/beta@3x.png",
+				"FlagLogo/flag@2x.png",
+				"FlagLogo/flag@3x.png",
+				"RetroLogo/retro@2x.png",
+				"RetroLogo/retro@3x.png",
+				"SnowLogo/snow@2x.png",
+				"SnowLogo/snow@3x.png",
+				"TurboLogo/turbo@2x.png",
+				"TurboLogo/turbo@3x.png",
+			);
+			target = D788166E2CBAF8CE0089683A /* BusifyiOSUITests */;
+		};
+		D7050A392EE361A400E58BF8 /* Exceptions for "BusifyiOS" folder in "BusifyNotificationExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"BetaLogo/beta@2x.png",
+				"BetaLogo/beta@3x.png",
+				"FlagLogo/flag@2x.png",
+				"FlagLogo/flag@3x.png",
+				"RetroLogo/retro@2x.png",
+				"RetroLogo/retro@3x.png",
+				"SnowLogo/snow@2x.png",
+				"SnowLogo/snow@3x.png",
+				"TurboLogo/turbo@2x.png",
+				"TurboLogo/turbo@3x.png",
+			);
+			target = D75A3A6B2CBC043300919B8E /* BusifyNotificationExtension */;
+		};
 		D75A3A672CBC040600919B8E /* Exceptions for "BusifyiOS" folder in "BusifyiOS" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -88,6 +136,9 @@
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				D75A3A672CBC040600919B8E /* Exceptions for "BusifyiOS" folder in "BusifyiOS" target */,
+				D7050A372EE361A400E58BF8 /* Exceptions for "BusifyiOS" folder in "BusifyiOSTests" target */,
+				D7050A382EE361A400E58BF8 /* Exceptions for "BusifyiOS" folder in "BusifyiOSUITests" target */,
+				D7050A392EE361A400E58BF8 /* Exceptions for "BusifyiOS" folder in "BusifyNotificationExtension" target */,
 			);
 			path = BusifyiOS;
 			sourceTree = "<group>";
@@ -142,11 +193,11 @@
 		D788164C2CBAF8CA0089683A = {
 			isa = PBXGroup;
 			children = (
-				D78816572CBAF8CA0089683A /* BusifyiOS */,
 				D78816682CBAF8CE0089683A /* BusifyiOSTests */,
 				D78816722CBAF8CE0089683A /* BusifyiOSUITests */,
 				D75A3A6D2CBC043300919B8E /* BusifyNotificationExtension */,
 				D78816562CBAF8CA0089683A /* Products */,
+				D78816572CBAF8CA0089683A /* BusifyiOS */,
 			);
 			sourceTree = "<group>";
 		};
@@ -564,11 +615,13 @@
 		D788167A2CBAF8CE0089683A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "";
+				ASSETCATALOG_COMPILER_APPICON_NAME = logo512;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_ENTITLEMENTS = BusifyiOS/BusifyiOS.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_ASSET_PATHS = "\"BusifyiOS/Preview Content\"";
 				DEVELOPMENT_TEAM = MTH43FS33M;
 				ENABLE_PREVIEWS = YES;
@@ -587,7 +640,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.5;
+				MARKETING_VERSION = 2.6;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mihnea.appbusify.busifyios;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -602,11 +655,13 @@
 		D788167B2CBAF8CE0089683A /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "";
+				ASSETCATALOG_COMPILER_APPICON_NAME = logo512;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_ENTITLEMENTS = BusifyiOS/BusifyiOS.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_ASSET_PATHS = "\"BusifyiOS/Preview Content\"";
 				DEVELOPMENT_TEAM = MTH43FS33M;
 				ENABLE_PREVIEWS = YES;
@@ -625,7 +680,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.5;
+				MARKETING_VERSION = 2.6;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mihnea.appbusify.busifyios;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
